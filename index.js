@@ -1,5 +1,6 @@
 const express = require('express');
 const { connectDB } = require('./src/config/db');
+const userRouter = require('./src/api/routes/user');
 require('dotenv').config();
 
 const PORT = 3000;
@@ -7,6 +8,8 @@ const app = express();
 
 connectDB();
 app.use(express.json());
+
+app.use('/user', userRouter);
 
 app.use('*', (req, res, next) => {
   const error = new Error('Route not found 🦖');
