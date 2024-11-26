@@ -20,7 +20,7 @@ const isLoggedIn = async (req, res, next) => {
   }
 };
 
-const isAdmin = async (req, res, next) => {
+const isAdmin = (req, res, next) => {
   try {
     return req.user.role === 'admin'
       ? next()

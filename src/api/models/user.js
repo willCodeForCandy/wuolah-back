@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, required: true, enum: ['user', 'admin'] },
   tickets: [{ type: mongoose.Types.ObjectId, ref: 'Ticket' }],
+  prevLoginWeek: { type: Number },
 });
 
 // encripto la contraseña antes de guardar el usuario en la BBDD

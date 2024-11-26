@@ -26,3 +26,5 @@ const getWeekNum = date => {
 // console.log(getWeekNum('02/01/2024'));
 // console.log(getWeekNum(new Date(2024, 0, 2)));
 // console.log(getWeekNum(new Date(2025, 0, 1)));
+
+module.exports = { getWeekNum };

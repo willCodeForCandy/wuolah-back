@@ -1,6 +1,7 @@
 const express = require('express');
 const { connectDB } = require('./src/config/db');
 const userRouter = require('./src/api/routes/user');
+const contestRouter = require('./src/api/routes/contest');
 require('dotenv').config();
 
 const PORT = 3000;
@@ -10,6 +11,7 @@ connectDB();
 app.use(express.json());
 
 app.use('/user', userRouter);
+app.use('/contest', contestRouter);
 
 app.use('*', (req, res, next) => {
   const error = new Error('Route not found 🦖');
