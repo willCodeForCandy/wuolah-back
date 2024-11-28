@@ -10,6 +10,6 @@ const contestSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Contest = mongoose.model('contest', contestSchema);
+const Contest = mongoose.model('Contest', contestSchema);
 
 module.exports = Contest;

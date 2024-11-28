@@ -1,6 +1,5 @@
 const { generateSign } = require('../../config/jwt');
-const { getWeekNum } = require('../../utils/weekCalc');
-const Ticket = require('../models/ticket');
+const { giveWeeklyTicket } = require('../../utils/weeklyLoginTicket');
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
@@ -29,6 +28,7 @@ const register = async (req, res, next) => {
   }
 };
 
+//! Esta función tiene parte de la lógica de asignación de tickets semanales
 const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -37,21 +37,15 @@ const login = async (req, res, next) => {
     if (user && validPassword) {
       const { prevLoginWeek, _id } = user;
       const token = generateSign(_id);
-      const thisWeek = getWeekNum();
-      const firstLogin = !prevLoginWeek;
-      // si el último login fue hace una semana o es la primera vez que el usuario se loguea
-      if (thisWeek - prevLoginWeek === 1 || firstLogin) {
-        // genero un nuevo ticket y se lo asigno al usuario
-        const newTicket = new Ticket({ owner: _id });
-        const savedTicket = await newTicket.save();
-        user.tickets.push(savedTicket._id);
-      }
+      const weeklyTicket = giveWeeklyTicket(prevLoginWeek, _id);
       // reseteo loginWeek y actualizo los tickets
       const updatedUser = await User.findByIdAndUpdate(
         _id,
         {
           prevLoginWeek: thisWeek,
-          tickets: [...user.tickets],
+          tickets: weeklyTicket
+            ? [...user.tickets, weeklyTicket]
+            : [...user.tickets],
         },
         { new: true }
       );

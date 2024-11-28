@@ -20,15 +20,30 @@ const createContest = async (req, res, next) => {
 
 const getContests = async (req, res, next) => {
   try {
-    const allContests = await Contest.find();
+    const allContests = await Contest.find().populate({
+      path: 'tickets',
+      populate: {
+        path: 'owner',
+        select: 'email',
+      },
+    });
     return res.status(200).json(allContests);
   } catch (error) {
     next(error);
   }
 };
 
-const editContest = async (req, res, next) => {
+const getContestById = async (req, res, next) => {
   try {
+    const { contestId } = req.params;
+    const contest = await Contest.findById(contestId).populate({
+      path: 'tickets',
+      populate: {
+        path: 'owner',
+        select: 'email',
+      },
+    });
+    return res.status(200).json(contest);
   } catch (error) {
     next(error);
   }
@@ -36,7 +51,7 @@ const editContest = async (req, res, next) => {
 
 const deleteContest = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { contestId } = req.params;
 
     const deletedContest = await Contest.findByIdAndDelete(id);
     return res
@@ -47,4 +62,9 @@ const deleteContest = async (req, res, next) => {
   }
 };
 
-module.exports = { createContest, editContest, getContests, deleteContest };
+module.exports = {
+  createContest,
+  getContests,
+  getContestById,
+  deleteContest,
+};
