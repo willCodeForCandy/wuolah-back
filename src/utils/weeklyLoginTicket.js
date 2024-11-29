@@ -1,8 +1,7 @@
-const { getWeekNum } = require('./weekCalc');
+const Ticket = require('../api/models/ticket');
 
-const giveWeeklyTicket = async (lastLogin, userId) => {
+const giveWeeklyTicket = async (lastLogin, userId, thisWeek) => {
   try {
-    const thisWeek = getWeekNum();
     const firstLogin = !lastLogin;
     // si el último login fue hace una semana o es la primera vez que el usuario se loguea
     if (thisWeek - lastLogin === 1 || firstLogin) {

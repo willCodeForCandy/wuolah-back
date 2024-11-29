@@ -1,4 +1,5 @@
 const { generateSign } = require('../../config/jwt');
+const { getWeekNum } = require('../../utils/weekCalc');
 const { giveWeeklyTicket } = require('../../utils/weeklyLoginTicket');
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
@@ -37,7 +38,9 @@ const login = async (req, res, next) => {
     if (user && validPassword) {
       const { prevLoginWeek, _id } = user;
       const token = generateSign(_id);
-      const weeklyTicket = giveWeeklyTicket(prevLoginWeek, _id);
+      const thisWeek = getWeekNum();
+      const weeklyTicket = await giveWeeklyTicket(prevLoginWeek, _id, thisWeek);
+
       // reseteo loginWeek y actualizo los tickets
       const updatedUser = await User.findByIdAndUpdate(
         _id,
