@@ -63,13 +63,6 @@ const login = async (req, res, next) => {
   }
 };
 
-const editUser = async (req, res, next) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
-
 const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -88,4 +81,4 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, editUser, deleteUser };
+module.exports = { register, login, deleteUser };
